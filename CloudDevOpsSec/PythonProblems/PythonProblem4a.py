@@ -1,35 +1,41 @@
 import random
+from enum import IntEnum
 
-while True:
-    user_action = input("Enter your choice (rock, paper, scissors)?")
+class Action(IntEnum):
+    Rock = 1
+    Paper = 2
+    Scissors = 3
 
-    if user_action != "rock" or user_action != "paper" or user_action != "scissors":
-        print("Invalid Choice!!!")
-        break
+def get_user_input():
+    choice = input(f"\nWhat's your choice ({Action._member_names_})???\n\nEnter '{Action.Rock}' for Rock, '{Action.Paper}' for Paper or '{Action.Scissors}' for Scissors: ")
+    user_input = Action(int(choice))
+    return user_input
 
-    possible_actions = ["rock", "paper", "scissors"]
-    computer_action = random.choice(possible_actions)
+def get_computer_input():
+    computer_input = Action(random.randint(1, len(Action)))
+    return computer_input
 
-    print(f"\nYou chose {user_action}, computer chose {computer_action}.\n")
-
-    if user_action == computer_action:
-        print(f"Both players selected {user_action}. It's a tie!")
-    elif user_action == "rock":
-        if computer_action == "scissors":
-            print("Rock smashes scissors! You win!")
+def check_winner(user_input,computer_input):
+    if user_input == computer_input:
+        print(f"Both user and computer selected '{user_input.name}'. It's a TIE!!!\n")
+    elif user_input == Action.Rock:
+        if computer_input == Action.Scissors:
+            print(f"'{user_input.name}' smashes '{computer_input.name}'! Congrats, You WIN!!!\n")
         else:
-            print("Paper covers rock! You lose.")
-    elif user_action == "paper":
-        if computer_action == "rock":
-            print("Paper covers rock! You win!")
+            print(f"{computer_input.name} covers '{user_input.name}'! Sorry, You LOSE!!!\n")
+    elif user_input == Action.Paper:
+        if computer_input == Action.Rock:
+            print(f"'{user_input.name}' covers '{computer_input.name}'! Congrats, You WIN!!!\n")
         else:
-            print("Scissors cuts paper! You lose.")
-    elif user_action == "scissors":
-        if computer_action == "paper":
-            print("Scissors cuts paper! You win!")
+            print(f"'{user_input.name}' cuts '{computer_input.name}'! Sorry, You LOSE!!!\n")
+    elif user_input == Action.Scissors:
+        if computer_input == Action.Paper:
+            print(f"'{user_input.name}' cuts '{computer_input.name}'! Congrats, You WIN!!!\n")
         else:
-            print("Rock smashes scissors! You lose.")
+            print(f"'{user_input.name}' smashes '{computer_input.name}'! Sorry, You LOSE!!!\n")
 
-    play_again = input("Play again? (yes/no): ")
-    if play_again != "yes":
-        break
+def continue_check():
+    resp = input("Would you like to play again? (yes/no): ")
+    if resp != "yes":
+        print(f"\nThank you for playing {Action._member_names_}!!!\n")
+        return False

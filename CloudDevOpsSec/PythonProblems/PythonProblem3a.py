@@ -1,14 +1,16 @@
+from enum import IntEnum
+
 class Employee:
-    BaseSalary = 100
+    BaseSalary = float(1000)
 
     def __init__(self,Name,Id,Type):
         self.EmployeeName = Name
         self.EmployeeId = Id
         self.EmployeeType = Type
 
-def percent(SalesMade):
-    Percent = float((5*SalesMade)/100)
-    return Percent
+class EmployeeType(IntEnum):
+    CommissionEmployee = 1
+    SalariedCommissionEmployee = 2
 
 class Sales(Employee):
     def __init__(self,Name,Id,Type,Sales):
@@ -17,24 +19,24 @@ class Sales(Employee):
         self.Percentage_Sales_Made = float(percent(self.SalesMade))
         
     def get_salary(self):
-        if Type == "CommissionEmployee":
+        if  self.EmployeeType == EmployeeType.CommissionEmployee:
             self.Salary = float(self.Percentage_Sales_Made)
         else:
             self.Salary = float(self.Percentage_Sales_Made) + float(Employee.BaseSalary)
         
         return self.Salary
+    
+def percent(SalesMade):
+    Percent = float((5*SalesMade)/100)
+    return Percent
 
-Name = input("Enter you Name:\n")
-Id = input("Enter your Employee Id?\n")
-Type_Response = input("Are you a CommissionEmployee(yes\\no)?\n")
+def get_employee_type():
+    Type_response = input(f"Is the employee {(EmployeeType._member_names_)[0]} or {(EmployeeType._member_names_)[1]}? Enter '{EmployeeType.CommissionEmployee}' for {(EmployeeType._member_names_)[0]} or '{EmployeeType.SalariedCommissionEmployee}' for {(EmployeeType._member_names_)[1]}: ")
+    Type = EmployeeType(int(Type_response))
+    return Type
 
-if Type_Response == "yes":
-    Type = "CommissionEmployee"
-else:
-    Type = "SalariedCommissionEmployee"
-
-SalesMade = float(input("Enter the amount in sales you made?\n"))
-
-e1 = Sales(Name,Id,Type,SalesMade)
-
-print(f"Your Salary is {e1.get_salary()}")
+def continue_check():
+    resp = input("Would you like to check salary for a different employee? (yes/no): ")
+    if resp != "yes":
+        print(f"\nExiting Now!!!\n")
+        return False
