@@ -4,4 +4,6 @@ from PythonProblem1a import Person
 
 #p1 = Person(name)
 
+#print(Person.welcome_msg(name))
+
 print(Person.welcome_msg())
