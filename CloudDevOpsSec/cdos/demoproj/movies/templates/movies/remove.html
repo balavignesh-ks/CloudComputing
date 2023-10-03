@@ -1,0 +1,8 @@
+<div class="main">
+	<form method="POST">
+		{% csrf_token %}
+		Are you sure you want to delete the movie '{{movie.title}}'?
+		<input type="submit" value="Yes" />
+		<a href="javascript:history.back()">Cancel</a>
+	</form>
+</div>

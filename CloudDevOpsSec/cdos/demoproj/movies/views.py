@@ -19,26 +19,52 @@ def show(request, movie_id):
     return render(request, 'movies/show.html', {'movie': movie})
     
 def add(request):
-        if request.method == 'POST':
-            print("Here 1")
-            form = MovieForm(request.POST)
-            print("Here 2")
-            if form.is_valid(): # Failing Here.... Need to Check further in this ....
-                print("Here 3")
-                _title = request.POST['title']
-                _director = request.POST['director']
-                _release_date = request.POST['release_date']
-                _genre = request.POST['genre']
-                _duration = request.POST['duration']
-                print("Here 4")
-                movie = Movie(title=_title, director=_director,release_date=_release_date,genre=_genre,duration=_duration)
-                print("Here 5")
-                movie.save()
-                print("Here 6")
-                
-                return render(request, 'movies/index.html')  
-
-        else:
-            form=MovieForm()
+    if request.method == 'POST':
+        form = MovieForm(request.POST)
+        if form.is_valid():
+            _title = request.POST['title']
+            _director = request.POST['director']
+            _release_date_0 = request.POST['release_date_0']
+            _release_date_1 = request.POST['release_date_1']
+            _release_date = _release_date_0 + " " + _release_date_1
+            _genre = request.POST['genre']
+            _duration = request.POST['duration']
+            movie = Movie(title=_title, director=_director,release_date=_release_date,genre=_genre,duration=_duration)
+            movie.save()
             
-        return render(request, "movies/add.html", {"form": form})
+            return HttpResponseRedirect(reverse('movies:index'))
+
+    else:
+        form=MovieForm()
+
+    return render(request, "movies/add.html", {"form": form})
+    
+def edit(request, movie_id):
+    context = {}
+ 
+    try:
+        movie = Movie.objects.get(pk=movie_id)
+        form = MovieForm(request.POST or None, instance = movie)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('movies:show',kwargs={'movie_id':movie_id}))
+    except Movie.DoesNotExist:
+        raise Http404("Movie does not exist")
+ 
+    context["form"] = form
+ 
+    return render(request, "movies/edit.html", context)
+    
+def remove(request, movie_id):
+    movie = Movie.objects.get(pk=movie_id)
+    
+    try:
+        if request.method == 'POST':
+            movie.delete()
+        
+            return HttpResponseRedirect(reverse('movies:index'))
+    except Movie.DoesNotExist:
+        raise Http404("Movie does not exist")
+        
+    return render(request, "movies/remove.html", {'movie': movie})
+    

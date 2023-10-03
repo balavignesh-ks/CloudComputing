@@ -12,4 +12,10 @@ urlpatterns = [
     
     # /movies/add
     path('add/', views.add, name='add'),
+    
+    # /movies/id/edit
+    path('<int:movie_id>/edit/', views.edit, name='edit'),
+    
+    # /movies/id/remove
+    path('<int:movie_id>/remove/', views.remove, name='remove'),
 ]

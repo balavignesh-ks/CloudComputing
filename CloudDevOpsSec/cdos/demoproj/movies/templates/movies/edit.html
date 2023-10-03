@@ -1,0 +1,11 @@
+<h1>Update movie</h1>
+
+<div class="main">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Update">
+    </form>
+</div>
+
+<p><a href="javascript:history.back()">Cancel Edit</a></p>
