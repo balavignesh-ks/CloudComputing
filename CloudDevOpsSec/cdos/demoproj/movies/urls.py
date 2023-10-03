@@ -9,4 +9,7 @@ urlpatterns = [
     
     # /movies/id e.g. /movies/1
     path('<int:movie_id>/', views.show, name='show'),
+    
+    # /movies/add
+    path('add/', views.add, name='add'),
 ]
